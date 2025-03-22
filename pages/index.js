@@ -1,71 +1,60 @@
-import { useCallback, useEffect, useState } from 'react'
-import Button from '../components/Button'
-import ClickCount from '../components/ClickCount'
-import styles from '../styles/home.module.css'
+import Head from "next/head";
+import { useEffect } from "react";
 
-function throwError() {
-  console.log(
-    // The function body() is not defined
-    document.body()
-  )
-}
-
-function Home() {
-  const [count, setCount] = useState(0)
-  const increment = useCallback(() => {
-    setCount((v) => v + 1)
-  }, [setCount])
-
+export default function Home() {
   useEffect(() => {
-    const r = setInterval(() => {
-      increment()
-    }, 1000)
+    // Load script files dynamically
+    const pdfLibScript = document.createElement("script");
+    pdfLibScript.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js";
+    pdfLibScript.async = true;
+
+    const docxScript = document.createElement("script");
+    docxScript.src = "https://cdn.jsdelivr.net/npm/docx@7.1.2/build/index.min.js";
+    docxScript.async = true;
+
+    const pdfjsScript = document.createElement("script");
+    pdfjsScript.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+    pdfjsScript.async = true;
+
+    document.body.appendChild(pdfLibScript);
+    document.body.appendChild(docxScript);
+    document.body.appendChild(pdfjsScript);
 
     return () => {
-      clearInterval(r)
-    }
-  }, [increment])
+      document.body.removeChild(pdfLibScript);
+      document.body.removeChild(docxScript);
+      document.body.removeChild(pdfjsScript);
+    };
+  }, []);
 
   return (
-    <main className={styles.main}>
-      <h1>Fast Refresh Demo</h1>
-      <p>
-        Fast Refresh is a Next.js feature that gives you instantaneous feedback
-        on edits made to your React components, without ever losing component
-        state.
-      </p>
-      <hr className={styles.hr} />
-      <div>
-        <p>
-          Auto incrementing value. The counter won't reset after edits or if
-          there are errors.
-        </p>
-        <p>Current value: {count}</p>
+    <>
+      <Head>
+        <title>AP PDF to Word Converter</title>
+        <link rel="stylesheet" href="/style.css" />
+      </Head>
+      <div className="container">
+        <marquee style={{ color: "black" }}>
+          Made with love 💕💕💕 from <a href="https://apcodesphere.vercel.app">Apcodesphere</a>
+        </marquee>
+        <h1>PDF ~ Word</h1>
+        <p>Convert your PDF files to Word documents easily.</p>
+        <div className="upload-box" id="uploadBox">
+          <input type="file" id="fileInput" accept=".pdf" hidden />
+          <label htmlFor="fileInput" className="upload-label">
+            <span className="drag-text">Drag & Drop or Click to Upload</span>
+            <span className="file-name" id="fileName"></span>
+          </label>
+        </div>
+        <button id="convertBtn" className="btn" disabled>
+          Convert to Word
+        </button>
+        <div className="status" id="status"></div>
+        <a id="downloadLink" className="download-link" style={{ display: "none" }}>
+          Download Word File
+        </a>
       </div>
-      <hr className={styles.hr} />
-      <div>
-        <p>Component with state.</p>
-        <ClickCount />
-      </div>
-      <hr className={styles.hr} />
-      <div>
-        <p>
-          The button below will throw 2 errors. You'll see the error overlay to
-          let you know about the errors but it won't break the page or reset
-          your state.
-        </p>
-        <Button
-          onClick={(e) => {
-            setTimeout(() => document.parentNode(), 0)
-            throwError()
-          }}
-        >
-          Throw an Error
-        </Button>
-      </div>
-      <hr className={styles.hr} />
-    </main>
-  )
+      <script src="/script.js"></script>
+    </>
+  );
 }
-
-export default Home
