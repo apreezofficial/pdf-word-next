@@ -31,7 +31,7 @@ export default function Home() {
     <>
       <Head>
         <title>AP PDF to Word Converter</title>
-        <link rel="stylesheet" href="/style.css" />
+        <link rel="stylesheet" href="../globals.css" />
       </Head>
       <div className="container">
         <marquee style={{ color: "black" }}>
@@ -54,7 +54,7 @@ export default function Home() {
           Download Word File
         </a>
       </div>
-      <script src="/script.js"></script>
+      <script src="script.js"></script>
     </>
   );
 }
